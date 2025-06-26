@@ -18,28 +18,28 @@ public class CanvasScreen extends Screen {
         int centerX = 0;
         int centerY = (this.height / 2) - (panelHeight / 2);
 
+        int bg = new Color(35, 35, 35, 255).getRGB();
         // coding from a ms paint pic is god tier
         context.fill(
                 centerX,
                 centerY,
                 centerX + panelWidth,
                 centerY + panelHeight,
-                new Color(35, 35, 35, 255).getRGB()
+               bg
         );
 
         int squaresCount = 4;
         int squareHeight = 20;
-        int squareWidth = panelWidth;
 
         int totalSquaresHeight = squaresCount * squareHeight;
 
         int startY = centerY + (panelHeight - totalSquaresHeight) / 2;
 
-        int squareX = centerX + (panelWidth - squareWidth) / 2;
+        int squareX = 0;
 
-        int white = Color.WHITE.getRGB();
-        int red = Color.RED.getRGB();
-        int black = Color.BLACK.getRGB();
+//        int white = Color.WHITE.getRGB();
+        int red = Color.WHITE.getRGB();
+        int black =Color.WHITE.getRGB();
 
         for (int i = 0; i < squaresCount; i++) {
             int squareY = startY + squareHeight * i;
@@ -47,22 +47,22 @@ public class CanvasScreen extends Screen {
             context.fill(
                     squareX,
                     squareY,
-                    squareX + squareWidth,
+                    squareX + panelWidth,
                     squareY + squareHeight,
-                    white
+                    bg
             );
 
-            context.fill(squareX, squareY, squareX + squareWidth, squareY + 1, red);
-            context.fill(squareX, squareY + squareHeight - 1, squareX + squareWidth, squareY + squareHeight, red);
-            context.fill(squareX, squareY, squareX + 1, squareY + squareHeight, red);
+            context.fill(squareX, squareY, squareX + panelWidth, squareY + 1, red);
+//            context.fill(squareX, squareY + squareHeight - 1, squareX + squareWidth, squareY + squareHeight, red);
+           /* context.fill(squareX, squareY, squareX + 1, squareY + squareHeight, red);
             context.fill(squareX + squareWidth - 1, squareY, squareX + squareWidth, squareY + squareHeight, red);
-
-            int centerLineX = (squareX + squareWidth / 2)-1;
+*/
+            int centerLineX = (squareX + panelWidth / 2)-1;
             context.fill(
                     centerLineX,
-                    squareY,
+                    squareY-15,
                     centerLineX + 1,
-                    squareY + squareHeight,
+                    squareY + squareHeight+5,
                     black
             );
         }
