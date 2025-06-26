@@ -12,12 +12,13 @@ public class CanvasScreen extends Screen {
     }
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        int panelWidth = 400;
-        int panelHeight = 180;
+        int panelWidth = 36;
+        int panelHeight = 190;
 
-        int centerY = (this.height / 2) - (panelHeight / 2);
         int centerX = 0;
+        int centerY = (this.height / 2) - (panelHeight / 2);
 
+        // coding from a ms paint pic is god tier
         context.fill(
                 centerX,
                 centerY,
@@ -26,58 +27,53 @@ public class CanvasScreen extends Screen {
                 new Color(35, 35, 35, 255).getRGB()
         );
 
-        int boxHeight = 120;
-        int boxTop = centerY + (panelHeight / 2) - (boxHeight / 2);
-        int boxRight = centerX + panelWidth;
-        int boxBottom = boxTop + boxHeight;
+        int squaresCount = 4;
+        int squareHeight = 20;
+        int squareWidth = panelWidth;
 
-        int lineColor = new Color(150, 150, 150, 255).getRGB();
+        int totalSquaresHeight = squaresCount * squareHeight;
 
-        int numLines = 4;
-        for (int i = 1; i <= numLines; i++) {
-            int y = boxTop + (i * boxHeight / (numLines + 1));
+        int startY = centerY + (panelHeight - totalSquaresHeight) / 2;
+
+        int squareX = centerX + (panelWidth - squareWidth) / 2;
+
+        int white = Color.WHITE.getRGB();
+        int red = Color.RED.getRGB();
+        int black = Color.BLACK.getRGB();
+
+        for (int i = 0; i < squaresCount; i++) {
+            int squareY = startY + squareHeight * i;
 
             context.fill(
-                    centerX + 4,
-                    y,
-                    boxRight - 4,
-                    y + 1,
-                    lineColor
+                    squareX,
+                    squareY,
+                    squareX + squareWidth,
+                    squareY + squareHeight,
+                    white
             );
 
-            int tickHeight = 5;
-            context.fill(centerX + 4, y - tickHeight / 2, centerX + 5, y + tickHeight / 2, lineColor);
-            context.fill(boxRight - 5, y - tickHeight / 2, boxRight - 4, y + tickHeight / 2, lineColor);
+            context.fill(squareX, squareY, squareX + squareWidth, squareY + 1, red);
+            context.fill(squareX, squareY + squareHeight - 1, squareX + squareWidth, squareY + squareHeight, red);
+            context.fill(squareX, squareY, squareX + 1, squareY + squareHeight, red);
+            context.fill(squareX + squareWidth - 1, squareY, squareX + squareWidth, squareY + squareHeight, red);
+
+            int centerLineX = (squareX + squareWidth / 2)-1;
+            context.fill(
+                    centerLineX,
+                    squareY,
+                    centerLineX + 1,
+                    squareY + squareHeight,
+                    black
+            );
         }
-
-        int midX = centerX + panelWidth / 2;
-        context.fill(
-                midX,
-                boxTop + 4,
-                midX + 1,
-                boxBottom - 4,
-                lineColor
-        );
-
-        int capWidth = 8;
-        context.fill(
-                midX - capWidth / 2,
-                boxBottom - 4,
-                midX + capWidth / 2,
-                boxBottom - 3,
-                lineColor
-        );
-
-        context.fill(
-                midX - capWidth / 2,
-                boxTop + 3,
-                midX + capWidth / 2,
-                boxTop + 4,
-                lineColor
-        );
 
         super.render(context, mouseX, mouseY, delta);
     }
+
+
+
+
+
 
 
 }
