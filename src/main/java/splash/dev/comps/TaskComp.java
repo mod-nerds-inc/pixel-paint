@@ -11,19 +11,22 @@ import java.util.Locale;
 
 public class TaskComp {
     private final int iconSize, iconSpacing, iconPadding, height;
-    List<Mode> modes = new ArrayList<>();
+    private final List<Mode> modes = new ArrayList<>();
+    private final List<Rectangle> iconBounds = new ArrayList<>();
+    private Mode currentMode;
 
+    private int lastX1, lastY1, lastTotalWidth;
 
     public TaskComp() {
-
-        iconSize = 15; /*this makes customizing so easy <3 im genius*/
+        iconSize = 15;
         iconSpacing = 13;
         iconPadding = 20;
-        height = 20;
+        height = 25;
 
         for (ModeType value : ModeType.values()) {
             register(new Mode(value));
         }
+        currentMode = modes.getFirst();
     }
 
     public void render(DrawContext context, int mouseX, int mouseY) {
@@ -35,19 +38,45 @@ public class TaskComp {
 
         int x1 = (windowWidth - totalWidth) / 2;
         int y1 = windowHeight - height - 8;
-        int x2 = x1 + totalWidth;
-        int y2 = y1 + height;
-
-        context.fill(x1, y1, x2, y2, new Color(0, 0, 0, 199).getRGB());
-        context.drawBorder(x1, y1, totalWidth, height, new Color(206, 206, 206, 197).getRGB());
-
         int startX = x1 + (totalWidth - iconsWidth) / 2;
         int iconY = y1 + (height - iconSize) / 2;
+
+        lastX1 = x1;
+        lastY1 = y1;
+        lastTotalWidth = totalWidth;
+
+        iconBounds.clear();
+
+        context.fill(x1, y1, x1 + totalWidth, y1 + height, new Color(0, 0, 0, 199).getRGB());
+        context.drawBorder(x1, y1, totalWidth, height, new Color(206, 206, 206, 197).getRGB());
 
         for (int i = 0; i < modes.size(); i++) {
             Mode mode = modes.get(i);
             int iconX = startX + i * (iconSize + iconSpacing);
+
+            Rectangle bounds = new Rectangle(iconX, iconY, iconSize, iconSize);
+            iconBounds.add(bounds);
+
+            boolean isHovered = bounds.contains(mouseX, mouseY);
+
+            if (isHovered) {
+                context.fill(iconX - 2, iconY - 2, iconX + iconSize + 2, iconY + iconSize + 2,
+                        new Color(255, 255, 255, 50).getRGB());
+            }
+
             Renderer2D.renderTexture(mode.getTexture(), context, iconX, iconY, iconSize, Color.WHITE);
+        }
+    }
+
+    public void mouseReleased(int button, int mouseX, int mouseY) {
+        if (button != 0) return;
+
+        for (int i = 0; i < iconBounds.size(); i++) {
+            Rectangle bounds = iconBounds.get(i);
+            if (bounds.contains(mouseX, mouseY)) {
+                currentMode = modes.get(i);
+                break;
+            }
         }
     }
 
@@ -55,14 +84,19 @@ public class TaskComp {
         if (!modes.contains(mode)) modes.add(mode);
     }
 
-
-    public enum ModeType {
-        PENCIL,
-        COLOR,
-        ERASER,
-        FILL,
-        SELECT
+    public Mode getCurrentMode() {
+        return currentMode;
     }
+
+    public List<Rectangle> getIconBounds() {
+        return iconBounds;
+    }
+
+    public Rectangle getTaskbarBounds() {
+        return new Rectangle(lastX1, lastY1, lastTotalWidth, height);
+    }
+
+
 
     public record Mode(ModeType modeType) {
         public Identifier getTexture() {
