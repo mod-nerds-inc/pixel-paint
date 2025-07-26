@@ -25,12 +25,15 @@ public class SettingBuilderScreen extends Screen {
         int screenWidth = this.width;
         int screenHeight = this.height;
 
+        int settingHeight = settings.isEmpty() ? 0 : settings.get(currentSettingIndex).height;
+        int totalHeight = boxHeight + settingHeight;
+
         boxX = (screenWidth - boxWidth) / 2;
-        boxY = (screenHeight - boxHeight) / 2;
+        boxY = (screenHeight - totalHeight) / 2;
 
         int padding = 10;
         leftArrowX = boxX + padding;
-        rightArrowX = boxX + boxWidth - mc.textRenderer.getWidth("<") - padding; // equal width right?
+        rightArrowX = boxX + boxWidth - mc.textRenderer.getWidth("<") - padding;
         textY = boxY + (boxHeight - mc.textRenderer.fontHeight) / 2;
     }
 
@@ -57,7 +60,11 @@ public class SettingBuilderScreen extends Screen {
         context.drawText(mc.textRenderer, text, textX, textY, -1, false);
 
         Setting setting = settings.get(currentSettingIndex);
-        setting.updatePosition(boxX + 15, boxY + 12); // tesing for now
+
+        int settingX = boxX + (boxWidth / 2) - (setting.width / 2);
+        int settingY = boxY + boxHeight;
+
+        setting.updatePosition(settingX, settingY);
         setting.render(context, mouseX, mouseY);
 
     }
