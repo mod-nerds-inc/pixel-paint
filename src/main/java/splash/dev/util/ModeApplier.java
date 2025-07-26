@@ -74,14 +74,14 @@ public class ModeApplier {
 
             if (currentX == endX && currentY == endY) break;
 
-            int error2 = 2 * close;
+            int close2 = 2 * close;
 
-            if (error2 > -deltaY) {
+            if (close2 > -deltaY) {
                 close -= deltaY;
                 currentX += stepX;
             }
 
-            if (error2 < deltaX) {
+            if (close2 < deltaX) {
                 close += deltaX;
                 currentY += stepY;
             }

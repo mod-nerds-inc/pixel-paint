@@ -53,7 +53,7 @@ public class CanvasComp {
 
         if (isCanvasHovered(mouseX, mouseY, windowWidth, windowHeight)) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
-            Renderer2D.renderTexture(taskComp.getCurrentMode().getTexture(), context, mouseX, mouseY, 15, Color.WHITE);
+            Renderer2D.renderTexture(taskComp.getCurrentMode().getTexture(), context, mouseX, mouseY - 9, 15, Color.WHITE);
         } else {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         }
