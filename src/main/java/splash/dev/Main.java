@@ -36,7 +36,7 @@ public class Main implements ModInitializer {
 
         List<Setting> settings = new ArrayList<>();
 
-        settings.add(new BooleanSetting("Smooth"));
+        settings.add(new BooleanSetting("Smooth",true));
         settings.add(new ModeSetting("Mode", new String[]{"Test", "Lol"}));
 
         SettingBuilderScreen settingBuilderScreen = new SettingBuilderScreen(settings);

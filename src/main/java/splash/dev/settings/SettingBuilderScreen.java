@@ -15,6 +15,7 @@ public class SettingBuilderScreen extends Screen {
     private int currentSettingIndex = 0;
     private int boxX, boxY, leftArrowX, rightArrowX, textY;
 
+
     public SettingBuilderScreen(List<Setting> settings) {
         super(Text.of("Settings"));
         this.settings = settings;
@@ -54,6 +55,11 @@ public class SettingBuilderScreen extends Screen {
         context.drawText(mc.textRenderer, ">", rightArrowX, textY, -1, false);
 
         context.drawText(mc.textRenderer, text, textX, textY, -1, false);
+
+        Setting setting = settings.get(currentSettingIndex);
+        setting.updatePosition(boxX + 15, boxY + 12); // tesing for now
+        setting.render(context, mouseX, mouseY);
+
     }
 
     @Override
