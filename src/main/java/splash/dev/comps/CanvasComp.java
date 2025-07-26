@@ -9,6 +9,8 @@ import splash.dev.util.Renderer2D;
 
 import java.awt.*;
 
+import static splash.dev.Main.mc;
+
 public class CanvasComp implements Renderable {
     int width, height;
     TaskComp taskComp;
@@ -56,7 +58,7 @@ public class CanvasComp implements Renderable {
     }
 
     public void updateCursor(DrawContext context, int mouseX, int mouseY, int windowWidth, int windowHeight) {
-        long window = MinecraftClient.getInstance().getWindow().getHandle();
+        long window = mc.getWindow().getHandle();
 
         if (isCanvasHovered(mouseX, mouseY, windowWidth, windowHeight)) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
