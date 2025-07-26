@@ -4,15 +4,15 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import org.lwjgl.glfw.GLFW;
 import splash.dev.util.ModeApplier;
+import splash.dev.util.Renderable;
 import splash.dev.util.Renderer2D;
 
 import java.awt.*;
 
-public class CanvasComp {
+public class CanvasComp implements Renderable {
     int width, height;
     TaskComp taskComp;
     ModeApplier modeApplier;
-
     public CanvasComp(TaskComp taskComp) {
         height = 300;
         width = 500;
@@ -20,17 +20,24 @@ public class CanvasComp {
         modeApplier = new ModeApplier(taskComp.getCurrentMode().modeType());
     }
 
+
+    @Override
     public void mouseClicked(int button, int x, int y) {
         if (button != 0) return;
         modeApplier.setPainting(true);
+        Renderable.super.mouseClicked(button, x, y);
     }
-    public void release(int button, int x, int y) {
+
+    @Override
+    public void mouseRelease(int button, int x, int y) {
         if (button != 0) return;
         modeApplier.setPainting(false);
-
+        Renderable.super.mouseRelease(button, x, y);
     }
 
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
+
         int windowWidth = context.getScaledWindowWidth();
         int windowHeight = context.getScaledWindowHeight();
 
@@ -45,7 +52,7 @@ public class CanvasComp {
         updateCursor(context, mouseX, mouseY, windowWidth, windowHeight);
         modeApplier.render(context, taskComp.getCurrentMode().modeType(), isCanvasHovered(mouseX, mouseY, windowWidth, windowHeight), mouseX, mouseY);
 
-
+        Renderable.super.render(context, mouseX, mouseY);
     }
 
     public void updateCursor(DrawContext context, int mouseX, int mouseY, int windowWidth, int windowHeight) {
