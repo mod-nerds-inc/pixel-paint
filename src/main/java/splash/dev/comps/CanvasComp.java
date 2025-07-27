@@ -1,9 +1,9 @@
 package splash.dev.comps;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import org.lwjgl.glfw.GLFW;
-import splash.dev.util.ModeApplier;
+import splash.dev.modes.FillMode;
+import splash.dev.modes.Mode;
 import splash.dev.util.Renderable;
 import splash.dev.util.Renderer2D;
 
@@ -14,67 +14,66 @@ import static splash.dev.Main.mc;
 public class CanvasComp implements Renderable {
     int width, height;
     TaskComp taskComp;
-    ModeApplier modeApplier;
+    Mode mode;
+
+    private int x1, y1, x2, y2;
+
     public CanvasComp(TaskComp taskComp) {
         height = 300;
         width = 500;
         this.taskComp = taskComp;
-        modeApplier = new ModeApplier(taskComp.getCurrentMode().modeType());
+        mode = new FillMode();
     }
-
 
     @Override
     public void mouseClicked(int button, int x, int y) {
-        if (button != 0) return;
-        modeApplier.setPainting(true);
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+            int localX = x - x1;
+            int localY = y - y1;
+            mode.mouseClicked(button, localX, localY);
+        }
         Renderable.super.mouseClicked(button, x, y);
     }
 
     @Override
     public void mouseRelease(int button, int x, int y) {
-        if (button != 0) return;
-        modeApplier.setPainting(false);
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+            int localX = x - x1;
+            int localY = y - y1;
+            mode.mouseRelease(button, localX, localY);
+        }
         Renderable.super.mouseRelease(button, x, y);
     }
 
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
-
         int windowWidth = context.getScaledWindowWidth();
         int windowHeight = context.getScaledWindowHeight();
 
-        int x1 = (windowWidth - width) / 2;
-        int y1 = (windowHeight - height) / 2;
-        int x2 = x1 + width;
-        int y2 = y1 + height;
+        x1 = (windowWidth - width) / 2;
+        y1 = (windowHeight - height) / 2;
+        x2 = x1 + width;
+        y2 = y1 + height;
+
+        boolean hovered = mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
+        mode.setCanvasHovered(hovered);
 
         context.fill(x1, y1, x2, y2, new Color(1, 1, 1, 100).getRGB());
         context.drawBorder(x1, y1, width, height, new Color(65, 65, 65, 255).getRGB());
 
-        updateCursor(context, mouseX, mouseY, windowWidth, windowHeight);
-        modeApplier.render(context, taskComp.getCurrentMode().modeType(), isCanvasHovered(mouseX, mouseY, windowWidth, windowHeight), mouseX, mouseY);
 
-        Renderable.super.render(context, mouseX, mouseY);
-    }
 
-    public void updateCursor(DrawContext context, int mouseX, int mouseY, int windowWidth, int windowHeight) {
         long window = mc.getWindow().getHandle();
 
-        if (isCanvasHovered(mouseX, mouseY, windowWidth, windowHeight)) {
+        if (hovered) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
-            Renderer2D.renderTexture(taskComp.getCurrentMode().getTexture(), context, mouseX, mouseY - 9, 15, Color.WHITE);
+            Renderer2D.renderTexture(taskComp.getCurrentMode().getTexture(), context, mouseX, mouseY - 9, 15, mode.getColor());
         } else {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         }
-    }
 
-
-    public boolean isCanvasHovered(int mouseX, int mouseY, int windowWidth, int windowHeight) {
-        int x1 = (windowWidth - width) / 2;
-        int y1 = (windowHeight - height) / 2;
-        int x2 = x1 + width;
-        int y2 = y1 + height;
-
-        return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
+        mode.render(context, mouseX, mouseY);
+        Renderable.super.render(context, mouseX, mouseY);
     }
 }

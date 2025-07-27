@@ -4,6 +4,8 @@ import net.minecraft.client.gui.DrawContext;
 
 import java.awt.*;
 
+import static splash.dev.Main.mc;
+
 public class SliderComp {
     private final float minValue;
     private final float maxValue;
@@ -27,13 +29,20 @@ public class SliderComp {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY) {
-
-        context.fill(x, y, x + width, y + height, -11184811);
-
+        context.fill(x, y, x + width, y + height, new Color(40, 40, 40, 180).getRGB());
         int knobX = (int) (x + ((value - minValue) / (maxValue - minValue)) * width);
-        context.fill(x, y, knobX, y + height, -16733441);
+        context.fill(x, y, knobX, y + height, new Color(0, 153, 204, 180).getRGB());
 
-        context.fill(knobX - 3, y, knobX + 3, y + height, Color.BLUE.getRGB());
+        context.fill(knobX - 3, y, knobX + 3, y + height, Color.CYAN.getRGB());
+
+        String valueText = String.valueOf((int) value);
+        int labelColor = Color.WHITE.getRGB();
+
+        int labelY = y + (height / 2) - 4;
+
+        context.drawText(mc.textRenderer, name, x + 4, labelY, labelColor, true);
+        int valueWidth = mc.textRenderer.getWidth(valueText);
+        context.drawText(mc.textRenderer, valueText, x + width - valueWidth - 4, labelY, labelColor, true);
 
         if (dragging) {
             updateValue(mouseX);

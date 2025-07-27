@@ -15,4 +15,5 @@ public class Renderer2D {
         context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, 0, 0, scale, scale, scale, scale);
         RenderSystem.setShaderColor(1, 1, 1, 1);
     }
+
 }
