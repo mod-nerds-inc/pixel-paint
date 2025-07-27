@@ -3,13 +3,15 @@ package splash.dev.comps;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import splash.dev.modes.*;
-import splash.dev.modes.Mode;
+import splash.dev.settings.SettingBuilderScreen;
 import splash.dev.util.Renderer2D;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static splash.dev.Main.mc;
 
 public class TaskComp {
     private final int iconSize, iconSpacing, iconPadding, height;
@@ -71,12 +73,17 @@ public class TaskComp {
     }
 
     public void mouseReleased(int button, int mouseX, int mouseY) {
-        if (button != 0) return;
 
         for (int i = 0; i < iconBounds.size(); i++) {
             Rectangle bounds = iconBounds.get(i);
             if (bounds.contains(mouseX, mouseY)) {
-                currentTaskbarButton = taskbarButtons.get(i);
+                switch (button) {
+                    case 0 -> currentTaskbarButton = taskbarButtons.get(i);
+                    case 1 -> {
+                        TaskbarButton taskbarButton = taskbarButtons.get(i);
+                        mc.setScreen(new SettingBuilderScreen(taskbarButton.getMode().getSettings()));
+                    }
+                }
                 break;
             }
         }

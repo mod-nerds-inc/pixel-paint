@@ -3,32 +3,36 @@ package splash.dev.settings;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
+import splash.dev.Main;
 
 import java.awt.*;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static splash.dev.Main.mc;
 
 public class SettingBuilderScreen extends Screen {
     private final int boxWidth = 250, boxHeight = 30;
     private final List<Setting> settings;
-    private final Consumer<List<Setting>> onCloseCallback;
     private int currentSettingIndex = 0;
     private int boxX, boxY, leftArrowX, rightArrowX, textY;
 
-    public SettingBuilderScreen(List<Setting> settings, Consumer<List<Setting>> onClose) {
+    public SettingBuilderScreen(List<Setting> settings) {
         super(Text.of("Settings"));
         this.settings = settings;
-        this.onCloseCallback = onClose;
     }
 
     @Override
-    public void close() {
-        if (onCloseCallback != null) {
-            onCloseCallback.accept(settings);
-        }
-        super.close();
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+       if(keyCode == GLFW.GLFW_KEY_ESCAPE){
+           Main.requestCanvas();
+       }
+        return super.keyReleased(keyCode, scanCode, modifiers);
     }
 
     private void updateLayout() {

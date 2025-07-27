@@ -9,20 +9,17 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import splash.dev.settings.ColorSetting;
-import splash.dev.settings.ModeSetting;
-import splash.dev.settings.Setting;
-import splash.dev.settings.SettingBuilderScreen;
 import splash.dev.ui.CanvasScreen;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main implements ModInitializer {
     public static final String MOD_ID = "pixel-paint";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static MinecraftClient mc = MinecraftClient.getInstance();
+    private static CanvasScreen canvasScreen;
+
+    public static void requestCanvas() {
+        mc.setScreen(canvasScreen);
+    }
 
     @Override
     public void onInitialize() {
@@ -33,9 +30,7 @@ public class Main implements ModInitializer {
                 MOD_ID
         ));
 
-        var ref = new Object() {
-            List<Setting> settings = new ArrayList<>();
-        };
+        canvasScreen = new CanvasScreen();
 
 
 
@@ -43,7 +38,7 @@ public class Main implements ModInitializer {
             if (mc.currentScreen == null && mc.world != null) {
 
                 if (recordGui.wasPressed() && !(mc.currentScreen instanceof CanvasScreen)) {
-                    mc.setScreen(new CanvasScreen());
+                    requestCanvas();
                 }
             }
         });

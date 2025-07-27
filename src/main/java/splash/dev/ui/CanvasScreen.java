@@ -14,13 +14,11 @@ public class CanvasScreen extends Screen {
         super(Text.of("canvas.screen"));
         taskComp = new TaskComp();
         canvasComp = new CanvasComp(taskComp);
-
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         canvasComp.mouseClicked(button, (int) mouseX, (int) mouseY);
-
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

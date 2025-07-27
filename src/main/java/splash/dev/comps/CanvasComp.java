@@ -2,7 +2,6 @@ package splash.dev.comps;
 
 import net.minecraft.client.gui.DrawContext;
 import org.lwjgl.glfw.GLFW;
-import splash.dev.modes.PencilMode;
 import splash.dev.modes.Mode;
 import splash.dev.util.Renderable;
 import splash.dev.util.Renderer2D;
@@ -22,7 +21,11 @@ public class CanvasComp implements Renderable {
         height = 300;
         width = 500;
         this.taskComp = taskComp;
-        mode = new PencilMode();
+        mode = taskComp.getCurrentMode().getMode();
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 
     @Override
