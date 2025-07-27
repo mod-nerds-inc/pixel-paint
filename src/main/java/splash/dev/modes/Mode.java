@@ -1,11 +1,13 @@
 package splash.dev.modes;
 
 import net.minecraft.client.gui.DrawContext;
+import splash.dev.settings.Setting;
 import splash.dev.util.Pixel;
 import splash.dev.util.Renderable;
 
 import java.awt.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Mode implements Renderable {
@@ -26,7 +28,8 @@ public abstract class Mode implements Renderable {
             int x = pixel.x();
             int y = pixel.y();
 
-            context.fill(x, y, x + 4, y + 4, getColor().getRGB());
+            System.out.println("got color " + pixel.color());
+            context.fill(x, y, x + pixel.size(), y + pixel.size(), pixel.color().getRGB());
         }
     }
 
@@ -35,14 +38,16 @@ public abstract class Mode implements Renderable {
     }
 
 
-
+    public List<Setting> getSettings(){ /*will be overriden so null plz*/
+        return null;
+    }
     public void setCanvasHovered(boolean canvasHovered) {
         isCanvasHovered = canvasHovered;
     }
 
     public Color getColor() {
-        if (this instanceof FillMode fillMode) {
-            return fillMode.getColor();
+        if (this instanceof PencilMode pencilMode) {
+            return pencilMode.getColor();
         }
         return Color.WHITE;
     }

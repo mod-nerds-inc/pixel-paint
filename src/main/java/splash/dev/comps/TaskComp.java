@@ -2,6 +2,8 @@ package splash.dev.comps;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
+import splash.dev.modes.*;
+import splash.dev.modes.Mode;
 import splash.dev.util.Renderer2D;
 
 import java.awt.*;
@@ -11,9 +13,9 @@ import java.util.Locale;
 
 public class TaskComp {
     private final int iconSize, iconSpacing, iconPadding, height;
-    private final List<Mode> modes = new ArrayList<>();
+    private final List<TaskbarButton> taskbarButtons = new ArrayList<>();
     private final List<Rectangle> iconBounds = new ArrayList<>();
-    private Mode currentMode;
+    private TaskbarButton currentTaskbarButton;
 
     private int lastX1, lastY1, lastTotalWidth;
 
@@ -24,16 +26,16 @@ public class TaskComp {
         height = 25;
 
         for (ModeType value : ModeType.values()) {
-            register(new Mode(value));
+            register(new TaskbarButton(value));
         }
-        currentMode = modes.getFirst();
+        currentTaskbarButton = taskbarButtons.getFirst();
     }
 
     public void render(DrawContext context, int mouseX, int mouseY) {
         int windowWidth = context.getScaledWindowWidth();
         int windowHeight = context.getScaledWindowHeight();
 
-        int iconsWidth = modes.size() * iconSize + (modes.size() - 1) * iconSpacing;
+        int iconsWidth = taskbarButtons.size() * iconSize + (taskbarButtons.size() - 1) * iconSpacing;
         int totalWidth = iconsWidth + iconPadding * 2;
 
         int x1 = (windowWidth - totalWidth) / 2;
@@ -50,8 +52,8 @@ public class TaskComp {
         context.fill(x1, y1, x1 + totalWidth, y1 + height, new Color(0, 0, 0, 199).getRGB());
         context.drawBorder(x1, y1, totalWidth, height, new Color(206, 206, 206, 197).getRGB());
 
-        for (int i = 0; i < modes.size(); i++) {
-            Mode mode = modes.get(i);
+        for (int i = 0; i < taskbarButtons.size(); i++) {
+            TaskbarButton taskbarButton = taskbarButtons.get(i);
             int iconX = startX + i * (iconSize + iconSpacing);
 
             Rectangle bounds = new Rectangle(iconX, iconY, iconSize, iconSize);
@@ -64,7 +66,7 @@ public class TaskComp {
                         new Color(255, 255, 255, 50).getRGB());
             }
 
-            Renderer2D.renderTexture(mode.getTexture(), context, iconX, iconY, iconSize, Color.WHITE);
+            Renderer2D.renderTexture(taskbarButton.getTexture(), context, iconX, iconY, iconSize, Color.WHITE);
         }
     }
 
@@ -74,18 +76,18 @@ public class TaskComp {
         for (int i = 0; i < iconBounds.size(); i++) {
             Rectangle bounds = iconBounds.get(i);
             if (bounds.contains(mouseX, mouseY)) {
-                currentMode = modes.get(i);
+                currentTaskbarButton = taskbarButtons.get(i);
                 break;
             }
         }
     }
 
-    public void register(Mode mode) {
-        if (!modes.contains(mode)) modes.add(mode);
+    public void register(TaskbarButton taskbarButton) {
+        if (!taskbarButtons.contains(taskbarButton)) taskbarButtons.add(taskbarButton);
     }
 
-    public Mode getCurrentMode() {
-        return currentMode;
+    public TaskbarButton getCurrentMode() {
+        return currentTaskbarButton;
     }
 
     public List<Rectangle> getIconBounds() {
@@ -98,9 +100,19 @@ public class TaskComp {
 
 
 
-    public record Mode(ModeType modeType) {
+    public record TaskbarButton(ModeType modeType) {
         public Identifier getTexture() {
             return Identifier.of("pixel-paint", "texture/" + modeType.toString().toLowerCase(Locale.ROOT) + ".png");
         }
+        public Mode getMode(){
+            return switch (modeType){
+                case PENCIL -> new PencilMode();
+                case COLOR -> new ColorMode();
+                case ERASER -> new EraserMode();
+                case FILL -> new FillMode();
+                case SELECT -> new SelectMode();
+            };
+        }
+
     }
 }
