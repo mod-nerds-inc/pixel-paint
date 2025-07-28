@@ -1,6 +1,7 @@
 package splash.dev.util;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class Pixel {
     private final int x;
@@ -33,11 +34,15 @@ public class Pixel {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Pixel other && other.x == x && other.y == y;
+        return obj instanceof Pixel other &&
+                other.x == x && other.y == y &&
+                other.size == size &&
+                other.color.equals(color);
     }
 
     @Override
     public int hashCode() {
-        return x * 31 + y;
+        return Objects.hash(x, y, color, size);
     }
+
 }

@@ -13,40 +13,39 @@ import java.util.List;
 public class PencilMode extends Mode {
     private final List<Setting> settings;
     int brushSize = 4;
-    private BrushMode brushMode;
-    private Color brushColor;
-    private boolean filling = false;
-
+    boolean filling;
     public PencilMode() {
         settings = new ArrayList<>();
+        settings.add(
+                new ModeSetting<>("Brush Mode", BrushMode.values(), BrushMode.Default)
+                        .onUpdate(mode -> StoredInfo.brushMode = mode)
+        );
+        settings.add(
+                new ColorSetting("Brush Color", Color.WHITE)
+                        .onUpdate(color -> {
+                            StoredInfo.brushColor = color;
+                        })
+        );
 
-        settings.add(new ModeSetting<>("Brush Mode", BrushMode.values(), BrushMode.Default)
-                .onUpdate(mode -> this.brushMode = mode));
-        settings.add(new ColorSetting("Brush Color", Color.WHITE)
-                .onUpdate(color -> this.brushColor = color));
-
-        this.brushMode = BrushMode.Default;
-        this.brushColor = Color.WHITE;
     }
+
+
 
     @Override
     public List<Setting> getSettings() {
         return settings;
     }
 
-    @Override
-    public Color getColor() {
-        return brushColor;
-    }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
         super.render(context, mouseX, mouseY);
-
         if (filling && isCanvasHovered) {
-            getPixels().add(new Pixel(mouseX, mouseY, brushColor, brushSize));
+
+            getPixels().add(new Pixel(mouseX, mouseY, StoredInfo.brushColor, brushSize));
         }
     }
+
 
     @Override
     public void mouseClicked(int button, int x, int y) {
@@ -56,6 +55,10 @@ public class PencilMode extends Mode {
         }
     }
 
+    @Override
+    public Color getColor() {
+        return StoredInfo.brushColor;
+    }
 
     @Override
     public void mouseRelease(int button, int x, int y) {
@@ -70,4 +73,6 @@ public class PencilMode extends Mode {
     public enum BrushMode {
         Default, Precise, Pixel
     }
+
+
 }

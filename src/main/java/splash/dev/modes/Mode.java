@@ -6,17 +6,16 @@ import splash.dev.util.Pixel;
 import splash.dev.util.Renderable;
 
 import java.awt.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Mode implements Renderable {
 
-    private final Set<Pixel> pixels;
+    private final List<Pixel> pixels;
     boolean isCanvasHovered;
 
     public Mode() {
-        pixels = new HashSet<>();
+        pixels = new ArrayList<>();
     }
 
     @Override
@@ -28,12 +27,11 @@ public abstract class Mode implements Renderable {
             int x = pixel.x();
             int y = pixel.y();
 
-            System.out.println("got color " + pixel.color());
             context.fill(x, y, x + pixel.size(), y + pixel.size(), pixel.color().getRGB());
         }
     }
 
-    public Set<Pixel> getPixels() {
+    public List<Pixel> getPixels() {
         return pixels;
     }
 
