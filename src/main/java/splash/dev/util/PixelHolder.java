@@ -1,12 +1,15 @@
 package splash.dev.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PixelHolder { // eventaully hadf to become a class to get serialized lol
     private static final PixelHolder INSTANCE = new PixelHolder();
 
-    private final List<Pixel> pixels = new ArrayList<>();
+    private final Map<String, Pixel> pixels = new HashMap<>();
+
 
     private PixelHolder() {
     }
@@ -15,28 +18,23 @@ public class PixelHolder { // eventaully hadf to become a class to get serialize
         return INSTANCE;
     }
 
-    public void addPixel(Pixel newPixel) {
-        if (pixels.contains(newPixel)) { // crazy how i didnt optimize it beforel like dis lOL
+    public void addPixel(Pixel pixel) {
+        String key = pixel.x() + "," + pixel.y();
+        if (pixels.containsKey(key)) {
             return;
         }
-        pixels.add(newPixel);
+        pixels.put(key, pixel);
     }
 
 
-
-    public List<Pixel> getPixels() {
+    public Map<String, Pixel> getPixels() {
         return pixels;
     }
 
     public void clearPixelAt(int x, int y) {
-        for (Pixel pixel : pixels) {
-            if (pixel.x() == x && pixel.y() == y) {
-                pixels.remove(pixel);
-                break;
-            }
-        }
+        String key = x + "," + y;
+        pixels.remove(key);
     }
-
 
     public void clearPixels() {
         pixels.clear();

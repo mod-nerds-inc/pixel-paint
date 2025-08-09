@@ -21,7 +21,7 @@ public class Mode implements Renderable {
     public void render(DrawContext context, int mouseX, int mouseY) {
         Renderable.super.render(context, mouseX, mouseY);
 
-        for (Pixel pixel : PixelHolder.getInstance().getPixels()) {
+        for (Pixel pixel : PixelHolder.getInstance().getPixels().values()) {
             int drawX = canvasX + pixel.x();
             int drawY = canvasY + pixel.y();
 
