@@ -6,6 +6,9 @@ import net.minecraft.text.Text;
 import splash.dev.comps.CanvasComp;
 import splash.dev.comps.SliderComp;
 import splash.dev.comps.TaskComp;
+import splash.dev.util.PixelHolder;
+
+import static splash.dev.Main.mc;
 
 public class CanvasScreen extends Screen {
     TaskComp taskComp;
@@ -31,6 +34,8 @@ public class CanvasScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
+        context.drawText(mc.textRenderer, String.valueOf(PixelHolder.getInstance().getPixels().size()), 5,5,-1,true);
+
         taskComp.render(context,mouseX,mouseY);
         canvasComp.render(context,mouseX,mouseY);
 

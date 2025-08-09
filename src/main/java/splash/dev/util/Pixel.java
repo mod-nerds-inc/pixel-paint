@@ -34,15 +34,21 @@ public class Pixel {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Pixel other &&
-                other.x == x && other.y == y &&
+        if (this == obj) return true;
+        if (!(obj instanceof Pixel other)) return false;
+        return other.x == x &&
+                other.y == y &&
                 other.size == size &&
                 other.color.equals(color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, color, size);
+        int result = Integer.hashCode(x);
+        result = 31 * result + Integer.hashCode(y);
+        result = 31 * result + Integer.hashCode(size);
+        result = 31 * result + color.hashCode();
+        return result;
     }
 
 }

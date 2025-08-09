@@ -36,9 +36,6 @@ public class Main implements ModInitializer {
         canvasScreen = new CanvasScreen();
 
 
-        HudRenderCallback.EVENT.register((drawContext, renderTickCounter) -> {
-            drawContext.drawText(mc.textRenderer, String.valueOf(PixelHolder.getInstance().getPixels().size()), 5,5,-1,true);
-        });
         ClientTickEvents.START_CLIENT_TICK.register(minecraftClient -> {
             if (mc.currentScreen == null && mc.world != null) {
 

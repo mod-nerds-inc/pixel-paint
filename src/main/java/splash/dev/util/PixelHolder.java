@@ -15,10 +15,13 @@ public class PixelHolder { // eventaully hadf to become a class to get serialize
         return INSTANCE;
     }
 
-    public void addPixel(Pixel pixel) {
-        System.out.println("added pixel at x" +pixel.x() + " y "+pixel.y());
-        pixels.add(pixel);
+    public void addPixel(Pixel newPixel) {
+        if (pixels.contains(newPixel)) { // crazy how i didnt optimize it beforel like dis lOL
+            return;
+        }
+        pixels.add(newPixel);
     }
+
 
 
     public List<Pixel> getPixels() {
@@ -26,17 +29,11 @@ public class PixelHolder { // eventaully hadf to become a class to get serialize
     }
 
     public void clearPixelAt(int x, int y) {
-        boolean found = false;
         for (Pixel pixel : pixels) {
             if (pixel.x() == x && pixel.y() == y) {
-                System.out.println("Removing pixel at: " + x + "," + y);
-                found = true;
                 pixels.remove(pixel);
                 break;
             }
-        }
-        if (!found) {
-            System.out.println("No pixel found at: " + x + "," + y);
         }
     }
 
