@@ -1,6 +1,7 @@
 package splash.dev.modes;
 
 import net.minecraft.client.gui.DrawContext;
+import splash.dev.settings.ModeSetting;
 import splash.dev.settings.Setting;
 import splash.dev.util.Pixel;
 import splash.dev.util.PixelHolder;

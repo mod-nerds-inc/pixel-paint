@@ -55,8 +55,8 @@ public class CanvasScreen extends Screen {
             }
         }
 
-        taskComp.render(context,mouseX,mouseY);
         canvasComp.render(context,mouseX,mouseY);
+        taskComp.render(context,mouseX,mouseY);
 
 
     }

@@ -4,6 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import splash.dev.settings.ColorSetting;
 import splash.dev.settings.ModeSetting;
 import splash.dev.settings.Setting;
+import splash.dev.util.InterpolationUtil;
 import splash.dev.util.Pixel;
 import splash.dev.util.PixelHolder;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class PencilMode extends Mode {
     private final List<Setting> settings;
-    int brushSize = 4;
+    int brushSize = 4,lastX,lastY;
     boolean filling;
     public PencilMode() {
 
@@ -36,7 +37,22 @@ public class PencilMode extends Mode {
     public void render(DrawContext context, int mouseX, int mouseY) {
         super.render(context, mouseX, mouseY);
         if (filling && isCanvasHovered) {
-            PixelHolder.getInstance().addPixel(new Pixel(getCanvasX(mouseX),getCanvasY(mouseY), StoredInfo.brushColor, brushSize));
+            int cx = getCanvasX(mouseX);
+            int cy = getCanvasY(mouseY);
+
+            if (lastX != -1 && lastY != -1) {
+                InterpolationUtil.begin(lastX, lastY, cx, cy, (x, y) -> {
+                    PixelHolder.getInstance().addPixel(new Pixel(x, y, StoredInfo.brushColor, brushSize));
+                });
+            } else {
+                PixelHolder.getInstance().addPixel(new Pixel(cx, cy, StoredInfo.brushColor, brushSize));
+            }
+
+            lastX = cx;
+            lastY = cy;
+        } else {
+            lastX = -1;
+            lastY = -1;
         }
     }
 
