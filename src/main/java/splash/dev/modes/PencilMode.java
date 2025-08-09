@@ -5,6 +5,7 @@ import splash.dev.settings.ColorSetting;
 import splash.dev.settings.ModeSetting;
 import splash.dev.settings.Setting;
 import splash.dev.util.Pixel;
+import splash.dev.util.PixelHolder;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -41,8 +42,7 @@ public class PencilMode extends Mode {
     public void render(DrawContext context, int mouseX, int mouseY) {
         super.render(context, mouseX, mouseY);
         if (filling && isCanvasHovered) {
-
-            getPixels().add(new Pixel(mouseX, mouseY, StoredInfo.brushColor, brushSize));
+            PixelHolder.getInstance().addPixel(new Pixel(getCanvasX(mouseX),getCanvasY(mouseY), StoredInfo.brushColor, brushSize));
         }
     }
 

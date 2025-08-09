@@ -16,6 +16,10 @@ public class CanvasScreen extends Screen {
         canvasComp = new CanvasComp(taskComp);
     }
 
+    public CanvasComp getCanvasComp() {
+        return canvasComp;
+    }
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         canvasComp.mouseClicked(button, (int) mouseX, (int) mouseY);

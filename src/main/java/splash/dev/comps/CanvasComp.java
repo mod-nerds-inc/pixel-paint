@@ -14,7 +14,6 @@ public class CanvasComp implements Renderable {
     int width, height;
     TaskComp taskComp;
     Mode mode;
-
     private int x1, y1, x2, y2;
 
     public CanvasComp(TaskComp taskComp) {
@@ -24,9 +23,6 @@ public class CanvasComp implements Renderable {
         mode = taskComp.getCurrentMode().getMode();
     }
 
-    public void setMode(Mode mode) {
-        this.mode = mode;
-    }
 
     @Override
     public void mouseClicked(int button, int x, int y) {
@@ -61,7 +57,7 @@ public class CanvasComp implements Renderable {
 
         boolean hovered = mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
         mode.setCanvasHovered(hovered);
-
+        mode.updateCoords(x1,y1);
         context.fill(x1, y1, x2, y2, new Color(1, 1, 1, 100).getRGB());
         context.drawBorder(x1, y1, width, height, new Color(65, 65, 65, 255).getRGB());
 

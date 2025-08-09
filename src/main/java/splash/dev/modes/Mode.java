@@ -3,38 +3,45 @@ package splash.dev.modes;
 import net.minecraft.client.gui.DrawContext;
 import splash.dev.settings.Setting;
 import splash.dev.util.Pixel;
+import splash.dev.util.PixelHolder;
 import splash.dev.util.Renderable;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Mode implements Renderable {
+public class Mode implements Renderable {
 
-    private final List<Pixel> pixels;
     boolean isCanvasHovered;
+    int canvasX, canvasY;
 
     public Mode() {
-        pixels = new ArrayList<>();
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY) {
         Renderable.super.render(context, mouseX, mouseY);
 
-        for (Pixel pixel : pixels) {
+        for (Pixel pixel : PixelHolder.getInstance().getPixels()) {
+            int drawX = canvasX + pixel.x();
+            int drawY = canvasY + pixel.y();
 
-            int x = pixel.x();
-            int y = pixel.y();
-
-            context.fill(x, y, x + pixel.size(), y + pixel.size(), pixel.color().getRGB());
+            context.fill(drawX, drawY, drawX + pixel.size(), drawY + pixel.size(), pixel.color().getRGB());
         }
+
     }
 
-    public List<Pixel> getPixels() {
-        return pixels;
+    public void updateCoords(int x, int y) {
+        this.canvasX = x;
+        this.canvasY = y;
     }
 
+    public int getCanvasX(int mouseX) {
+        return mouseX - canvasX;
+    }
+
+    public int getCanvasY(int mouseY) {
+        return mouseY - canvasY;
+    }
 
     public List<Setting> getSettings(){ /*will be overriden so null plz*/
         return null;

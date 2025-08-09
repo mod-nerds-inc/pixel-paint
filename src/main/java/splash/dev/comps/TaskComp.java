@@ -2,6 +2,7 @@ package splash.dev.comps;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
+import splash.dev.Main;
 import splash.dev.modes.*;
 import splash.dev.settings.SettingBuilderScreen;
 import splash.dev.util.Renderer2D;
@@ -78,7 +79,10 @@ public class TaskComp {
             Rectangle bounds = iconBounds.get(i);
             if (bounds.contains(mouseX, mouseY)) {
                 switch (button) {
-                    case 0 -> currentTaskbarButton = taskbarButtons.get(i);
+                    case 0 -> {
+                        currentTaskbarButton = taskbarButtons.get(i);
+                        Main.requestCanvas().getCanvasComp().mode = currentTaskbarButton.getMode();
+                    }
                     case 1 -> {
                         TaskbarButton taskbarButton = taskbarButtons.get(i);
                         mc.setScreen(new SettingBuilderScreen(taskbarButton.getMode().getSettings()));
@@ -105,12 +109,11 @@ public class TaskComp {
         return new Rectangle(lastX1, lastY1, lastTotalWidth, height);
     }
 
-
-
     public record TaskbarButton(ModeType modeType) {
         public Identifier getTexture() {
             return Identifier.of("pixel-paint", "texture/" + modeType.toString().toLowerCase(Locale.ROOT) + ".png");
         }
+
         public Mode getMode(){
             return switch (modeType){
                 case PENCIL -> new PencilMode();
