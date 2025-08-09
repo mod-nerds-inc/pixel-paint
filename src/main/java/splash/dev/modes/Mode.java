@@ -56,4 +56,7 @@ public class Mode implements Renderable {
         }
         return Color.WHITE;
     }
+    public int getHandScale(){
+        return 15;
+    }
 }

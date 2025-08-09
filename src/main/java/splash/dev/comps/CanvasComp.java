@@ -62,17 +62,24 @@ public class CanvasComp implements Renderable {
         context.drawBorder(x1, y1, width, height, new Color(65, 65, 65, 255).getRGB());
 
 
-
         long window = mc.getWindow().getHandle();
 
         if (hovered) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
-            Renderer2D.renderTexture(taskComp.getCurrentMode().getTexture(), context, mouseX, mouseY - 9, 15, mode.getColor());
+            Renderer2D.renderTexture(taskComp.getCurrentMode().getTexture(), context, mouseX, mouseY - 9, mode.getHandScale(), mode.getColor());
         } else {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
         }
 
         mode.render(context, mouseX, mouseY);
         Renderable.super.render(context, mouseX, mouseY);
+    }
+
+    public int getWidth() {
+        return x2 - x1;
+    }
+
+    public int getHeight() {
+        return y2 - y1;
     }
 }

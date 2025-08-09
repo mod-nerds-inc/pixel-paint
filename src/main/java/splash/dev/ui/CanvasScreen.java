@@ -3,8 +3,8 @@ package splash.dev.ui;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import splash.dev.comps.CanvasComp;
-import splash.dev.comps.SliderComp;
 import splash.dev.comps.TaskComp;
 import splash.dev.util.PixelHolder;
 
@@ -13,6 +13,7 @@ import static splash.dev.Main.mc;
 public class CanvasScreen extends Screen {
     TaskComp taskComp;
     CanvasComp canvasComp;
+    boolean showDebug;
     public CanvasScreen() {
         super(Text.of("canvas.screen"));
         taskComp = new TaskComp();
@@ -30,11 +31,29 @@ public class CanvasScreen extends Screen {
     }
 
 
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_F3) showDebug = !showDebug; // we stealing mojangs ideas wit this one!!
+        return super.keyReleased(keyCode, scanCode, modifiers);
+    }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.drawText(mc.textRenderer, String.valueOf(PixelHolder.getInstance().getPixels().size()), 5,5,-1,true);
+        if (showDebug) {
+            int y = 1;
+            int offset = mc.textRenderer.fontHeight + 2;
+
+            String[] lines = new String[]{
+                    "Pixels: " + PixelHolder.getInstance().getPixels().size(),
+                    "Size: " + canvasComp.getWidth() + " x " + canvasComp.getHeight(),
+            };
+
+            for (String line : lines) {
+                context.drawText(mc.textRenderer, line, 1, y, -1, true);
+                y += offset;
+            }
+        }
 
         taskComp.render(context,mouseX,mouseY);
         canvasComp.render(context,mouseX,mouseY);

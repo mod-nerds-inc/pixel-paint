@@ -16,17 +16,11 @@ public class PencilMode extends Mode {
     int brushSize = 4;
     boolean filling;
     public PencilMode() {
+
         settings = new ArrayList<>();
-        settings.add(
-                new ModeSetting<>("Brush Mode", BrushMode.values(), BrushMode.Default)
-                        .onUpdate(mode -> StoredInfo.brushMode = mode)
-        );
-        settings.add(
-                new ColorSetting("Brush Color", Color.WHITE)
-                        .onUpdate(color -> {
-                            StoredInfo.brushColor = color;
-                        })
-        );
+
+        settings.add(new ModeSetting<>("Brush Mode", BrushMode.values(), BrushMode.Default).onUpdate(mode -> StoredInfo.brushMode = mode));
+        settings.add(new ColorSetting("Brush Color", Color.WHITE).onUpdate(color -> StoredInfo.brushColor = color));
 
     }
 
